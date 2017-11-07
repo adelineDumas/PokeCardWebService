@@ -1,7 +1,14 @@
-#Initiation au PHP
+# PokeCardAPI
 
-##Présenatation du PHP
 
-##Présentation du micro-framework Silex et de composer
+faire un git clone 
 
-##Installation des différents composants à l'aide de composer
+installer node js ( https://nodejs.org/en)
+
+aller dans le dossier que tu viens de cloner
+
+lancer npm install
+
+lancer npm run start
+
+l'adresse est ensuite localhost:3000
