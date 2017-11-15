@@ -11,4 +11,3 @@ var routes = require('./api/routes/routes');
 routes(app);
 
 app.listen(port);
-
