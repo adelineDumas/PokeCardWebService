@@ -30,7 +30,7 @@ exports.pokedex = function(req, res) {
 
 exports.pokemon = function(req, res) {
 
-	var pokemonId = params.req.pokemonId;
+	var pokemonId = req.params.pokemonId;
 	var options = "https://pokeapi.co/api/v2/pokemon/"+pokemonId+"/";
 
 	var data = "";

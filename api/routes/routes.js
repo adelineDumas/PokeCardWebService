@@ -4,7 +4,7 @@ module.exports = function(app) {
 	var authController = require('../controllers/userController');
 
 	app.route('/pokedex').get(pokemonController.pokedex);
-	app.route('/pokemon/:pokemonId').get(pokemonController.pokedex);
+	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);
 	//app.route('/verifylogin').post(authController.login);
 	//app.route('/signup').post(authController.signup);
 	//app.route('/collection').get(pokemonController.collection);
