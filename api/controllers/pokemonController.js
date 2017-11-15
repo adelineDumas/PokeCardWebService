@@ -6,7 +6,7 @@ exports.pokedex = function(req, res) {
 	var options = "https://pokeapi.co/api/v2/pokedex/1/"; //pokedex national
 
 	var data = "";
-
+	var response = [];
 	var request = https.get(options, (result) => {
 		result.on('data', (d) => {
 			data += d;
@@ -15,9 +15,10 @@ exports.pokedex = function(req, res) {
 			var infoPokemon = JSON.parse(data);
 			for(var i=0;i<721;i++){
 				var id_pkmn = i+1;
-				infoPokemon.pokemon_entries[i].pokemon_species["url_img"] = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png";
+				var pkmnTmp = {"id":id_pkmn, "name": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"}
+				response.push(pkmnTmp);
 			}
-			res.json(infoPokemon);
+			res.json(response);
 		});
 	});
 
