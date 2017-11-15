@@ -9,19 +9,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johanlannier/PokeCardAPI.git"
+    "url": "git+https://github.com/adelineDumas/PokeCardWebService"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/johanlannier/PokeCardAPI/issues"
+    "url": "https://github.com/adelineDumas/PokeCardWebService/issues"
   },
-  "homepage": "https://github.com/johanlannier/PokeCardAPI#readme",
+  "homepage": "https://github.com/adelineDumas/PokeCardWebService#readme",
   "devDependencies": {
     "nodemon": "^1.12.1"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mysql": "^2.15.0",
+    "sha1": "^1.1.1"
   }
 }
