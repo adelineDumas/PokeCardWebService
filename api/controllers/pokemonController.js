@@ -1,5 +1,7 @@
 'use strict';
+var http = require('http');
 var https = require('https');
+var Promise = require('promise');
 
 exports.pokedex = function(req, res) {
 
@@ -50,4 +52,43 @@ exports.pokemon = function(req, res) {
 	});
 
 	request.end();
+}
+
+exports.booster = function(req, res) {
+	var options = {
+					port: 3000,
+					hostname: '127.0.0.1',
+					method: 'GET',
+					path: '/pokedex',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				};
+
+	var response = [];
+
+	var data = "";
+
+	var request = http.get(options, (result) => {
+			result.on('data', (d) => {
+			data += d;
+	});
+
+	result.on('end', function() {
+			var tmpData = JSON.parse(data);
+			for(var i=0;i<15;i++){
+				var min = Math.ceil(1);
+	    	var max = Math.floor(721);
+	    	var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
+				response.push(tmpData[pokemonId]);
+			}
+			res.json(response);
+		});
+	});
+	request.on('error', (e) => {
+		console.error(e);
+	});
+
+	request.end();
+
 }

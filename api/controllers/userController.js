@@ -2,16 +2,15 @@
 var https = require('https');
 var mysql = require('mysql');
 var sha1 = require('sha1');
-//var routes = require('../../global.js');
 
-/*var connection = mysql.createConnection({
+var connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
 	password: '',
 	database: 'PokeCard'
 });
 
-connection.connect();*/
+connection.connect();
 
 /*exports.verifylogin = function(req, res) {
 	var loginUser = req.body.login;

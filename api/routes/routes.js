@@ -5,6 +5,7 @@ module.exports = function(app) {
 
 	app.route('/pokedex').get(pokemonController.pokedex);
 	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);
+	app.route('/getbooster').get(pokemonController.booster);
 	//app.route('/verifylogin').post(authController.login);
 	//app.route('/signup').post(authController.signup);
 	//app.route('/collection').get(pokemonController.collection);
