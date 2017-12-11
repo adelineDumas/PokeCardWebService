@@ -17,7 +17,7 @@ exports.pokedex = function(req, res) {
 			var infoPokemon = JSON.parse(data);
 			for(var i=0;i<721;i++){
 				var id_pkmn = i+1;
-				var pkmnTmp = {"id":id_pkmn, "name": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"}
+				var pkmnTmp = {"id_pokemon":id_pkmn, "name_pokemon": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"}
 				response.push(pkmnTmp);
 			}
 			res.json(response);

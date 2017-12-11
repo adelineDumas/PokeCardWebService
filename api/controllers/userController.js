@@ -12,12 +12,13 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-/*exports.verifylogin = function(req, res) {
+exports.verifylogin = function(req, res) {
 	var loginUser = req.body.login;
 	var password = req.body.password;
-
-	/*connection.query('SELECT * FROM User WHERE password LIKE "' + password + '"', function(error, results, fields) {
-		if(results) {
+  console.log("LOGIN: " + loginUser);
+  console.log("MDP: " + password);
+	connection.query('SELECT * FROM User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+		if(results.length > 0) {
 			if(sha1(password) == results[0].password) {
 				res.json(results[0]);
 			}
@@ -29,7 +30,21 @@ connection.connect();
 			res.json({ user: false });
 		}
 	});
-}*/
+}
+
+exports.collection = function(req, res) {
+	var loginUser = req.params.login;
+
+	connection.query('SELECT * FROM Collection_User NATURAL JOIN Pokemon WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+		if(results.length > 0) {
+
+				res.json(results);
+		}
+		else {
+        res.json({ collection: false });
+		}
+	});
+}
 
 /*exports.listeamis = function(req, res){
 		connection.query('SELECT * FROM Collection_User WHERE login_user LIKE "' + global.user["login"] + '"', function(error, results, fields){
