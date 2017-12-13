@@ -15,8 +15,6 @@ connection.connect();
 exports.verifylogin = function(req, res) {
 	var loginUser = req.body.login;
 	var password = req.body.password;
-  console.log("LOGIN: " + loginUser);
-  console.log("MDP: " + password);
 	connection.query('SELECT * FROM User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(results.length > 0) {
 			if(sha1(password) == results[0].password) {
@@ -33,12 +31,32 @@ exports.verifylogin = function(req, res) {
 }
 
 exports.collection = function(req, res) {
-	var loginUser = req.params.login;
+  var loginUser = req.body.login;
 
-	connection.query('SELECT * FROM Collection_User NATURAL JOIN Pokemon WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(results.length > 0) {
 
-				res.json(results);
+				var options = "https://pokeapi.co/api/v2/pokedex/1/"; //pokedex national
+
+				var data = "";
+				var response = [];
+				var request = https.get(options, (result) => {
+					result.on('data', (d) => {
+						data += d;
+					});
+					result.on('end', function() {
+						var infoPokemon = JSON.parse(data);
+						for(var i=0;i<results.length;i++){
+							var pkmnTmp = {"id_pokemon":results[i].id_pokemon, "name_pokemon": infoPokemon.pokemon_entries[results[i].id_pokemon-1].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].id_pokemon+".png"}
+							response.push(pkmnTmp);
+						}
+						res.json(response);
+					});
+				});
+				request.on('error', (e) => {
+					console.error(e);
+				});
+				request.end();
 		}
 		else {
         res.json({ collection: false });
