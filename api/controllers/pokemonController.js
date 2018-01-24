@@ -1,7 +1,6 @@
 'use strict';
 var http = require('http');
 var https = require('https');
-var Promise = require('promise');
 
 exports.pokedex = function(req, res) {
 
@@ -17,7 +16,7 @@ exports.pokedex = function(req, res) {
 			var infoPokemon = JSON.parse(data);
 			for(var i=0;i<721;i++){
 				var id_pkmn = i+1;
-				var pkmnTmp = {"id_pokemon":id_pkmn, "name_pokemon": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"}
+				var pkmnTmp = {"id_pokemon":id_pkmn, "name_pokemon": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"};
 				response.push(pkmnTmp);
 			}
 			res.json(response);
@@ -37,13 +36,27 @@ exports.pokemon = function(req, res) {
 	var options = "https://pokeapi.co/api/v2/pokemon/"+pokemonId+"/";
 
 	var data = "";
+	var response = [];
 
 	var request = https.get(options, (result) => {
 		result.on('data', (d) => {
 			data += d;
 		});
 		result.on('end', function() {
-			res.json(JSON.parse(data));
+			var infosPokemon = JSON.parse(data);
+			console.log(infosPokemon);
+			var customInfo = {
+				"id_pokemon" : infosPokemon.id,
+				"name_pokemon" : infosPokemon.name,
+				"url_img" : "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+infosPokemon.id+".png",
+				"height" : infosPokemon.height,
+				"weight" : infosPokemon.weight,
+				"type1" : infosPokemon.types[0].type.name,
+				"type2" : (infosPokemon.types[0].type.name) ? infosPokemon.types[1].type.name : "",
+				"ability1" : infosPokemon.abilities[0].ability.name,
+				"ability2" : (infosPokemon.abilities[1].ability.name) ? infosPokemon.abilities[1].ability.name : ""
+			};
+			res.json(customInfo);
 		});
 	});
 
