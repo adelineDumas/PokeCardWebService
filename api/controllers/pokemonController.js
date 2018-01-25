@@ -44,7 +44,6 @@ exports.pokemon = function(req, res) {
 		});
 		result.on('end', function() {
 			var infosPokemon = JSON.parse(data);
-			console.log(infosPokemon);
 			var customInfo = {
 				"id_pokemon" : infosPokemon.id,
 				"name_pokemon" : infosPokemon.name,
@@ -52,9 +51,9 @@ exports.pokemon = function(req, res) {
 				"height" : infosPokemon.height,
 				"weight" : infosPokemon.weight,
 				"type1" : infosPokemon.types[0].type.name,
-				"type2" : (infosPokemon.types[0].type.name) ? infosPokemon.types[1].type.name : "",
+				"type2" : (infosPokemon.types.length > 1) ? infosPokemon.types[1].type.name : "",
 				"ability1" : infosPokemon.abilities[0].ability.name,
-				"ability2" : (infosPokemon.abilities[1].ability.name) ? infosPokemon.abilities[1].ability.name : ""
+				"ability2" : (infosPokemon.abilities.length > 1) ? infosPokemon.abilities[1].ability.name : ""
 			};
 			res.json(customInfo);
 		});
