@@ -31,8 +31,8 @@ exports.verifylogin = function(req, res) {
 }
 
 exports.collection = function(req, res) {
-  //var loginUser = req.body.login;
-  var loginUser = req.params.login;
+  //var loginUser = req.body.login; //POST
+  var loginUser = req.params.login; //GET
 
 	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(results.length > 0) {
@@ -66,12 +66,13 @@ exports.collection = function(req, res) {
 }
 
 exports.exchangereq = function(req, res) {
-	//var loginUser = req.body.login;
-	var loginUser = req.params.login;
-	//var pokemonId = req.body.pokemonId;
-	var pokemonId = req.params.pokemonId;
+	//var loginUser = req.body.login_user; //POST
+	var loginUser = req.params.login; //GET
+	//var pokemonId = req.body.id_pokemon; //POST
+	var pokemonId = req.params.pokemonId; //GET
 
 	connection.query('INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '")', function(error, results, fields) {
+		console.log('Y A UNE ERREUR GROS INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '")');
 		if(error) {
 			res.json({ response: false });
 		}
@@ -96,10 +97,10 @@ exports.exchangereq = function(req, res) {
 }
 
 exports.exchangewith = function(req, res) {
-	//var loginUser1 = req.body.login1;
-	var loginUser1 = req.params.login1;
-	//var loginUser2 = req.body.login2;
-	var loginUser2 = req.params.login2;
+	//var loginUser1 = req.body.login_user1; //POST
+	var loginUser1 = req.params.login1; //GET
+	//var loginUser2 = req.body.login_user2; //POST
+	var loginUser2 = req.params.login2; //GET
 
 	var pokemonId1, pokemonId2, idLignePkmnUser1, idLignePkmnUser2;
 
@@ -119,7 +120,7 @@ exports.exchangewith = function(req, res) {
 					pokemonId2 = results[0].id_pokemon;
 
 					//On récupère l'id de la ligne du pokemon dans la collection de l'utilisateur 1
-					connection.query('SELECT id_ligne FROM Collection_User WHERE login_user LIKE "' + loginUser1  + '" AND id_pokemon LIKE "' + pokemonId1 + '"', function(error, results, fields) {	
+					connection.query('SELECT id_ligne FROM Collection_User WHERE login_user LIKE "' + loginUser1  + '" AND id_pokemon LIKE "' + pokemonId1 + '"', function(error, results, fields) {
 						if(error){
 							res.json({ response: false });
 						}
@@ -127,7 +128,7 @@ exports.exchangewith = function(req, res) {
 							idLignePkmnUser1 = results[0].id_ligne;//On prend toujours le 1er pokemon (il peut y avoir plusieurs pokemons identiques)
 
 							//On récupère l'id de la ligne du pokemon dans la collection de l'utilisateur 2
-							connection.query('SELECT id_ligne FROM Collection_User WHERE login_user LIKE "' + loginUser2 + '" AND id_pokemon LIKE "' + pokemonId2 + '"', function(error, results, fields) {	
+							connection.query('SELECT id_ligne FROM Collection_User WHERE login_user LIKE "' + loginUser2 + '" AND id_pokemon LIKE "' + pokemonId2 + '"', function(error, results, fields) {
 								if(error){
 									res.json({ response: false });
 								}
@@ -162,7 +163,7 @@ exports.exchangewith = function(req, res) {
 											});
 										}
 									});
-							
+
 								}
 							});
 						}
