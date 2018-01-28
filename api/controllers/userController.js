@@ -31,8 +31,8 @@ exports.verifylogin = function(req, res) {
 }
 
 exports.collection = function(req, res) {
-  //var loginUser = req.body.login;
-  var loginUser = req.params.login;
+  var loginUser = req.body.login; // POST
+  //var loginUser = req.params.login; // GET
 
 	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(results.length > 0) {
@@ -66,25 +66,27 @@ exports.collection = function(req, res) {
 }
 
 exports.exchangereq = function(req, res) {
-	//var loginUser = req.body.login;
-	var loginUser = req.params.login;
-	//var pokemonId = req.body.pokemonId;
-	var pokemonId = req.params.pokemonId;
+	var loginUser = req.body.login_user;
+	//var loginUser = req.params.login;
+	var pokemonId = req.body.id_pokemon;
+	//var pokemonId = req.params.pokemonId;
+	var nomPokemon = req.body.nom_pokemon;
+	var url = req.body.url;
 
-	connection.query('INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '")', function(error, results, fields) {
+	connection.query('INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '", "' + nomPokemon + '", "' + url + '")', function(error, results, fields) {
 		if(error) {
 			res.json({ response: false });
 		}
 	});
 
-	connection.query('SELECT login_user, id_pokemon FROM Requete_Echange WHERE login_user NOT LIKE "' + loginUser + '"', function(error, results, fields) {
+	connection.query('SELECT login_user, id_pokemon, nom_pokemon, url FROM Requete_Echange WHERE login_user NOT LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(error){
 			res.json({ response: false });//aucun résultat à cause d'une erreur
 		}
 		if(results.length >= 1) {
 			var data = [];
 			for(var i=0;i<results.length;i++){
-				var line = {"login_user": results[i].login_user, "id_pokemon": results[i].id_pokemon};
+				var line = {"login_user": results[i].login_user, "id_pokemon": results[i].id_pokemon, "nom_pokemon": results[i].nom_pokemon, "url": results[i].url};
 				data.push(line);
 			}
 			res.json(data);
