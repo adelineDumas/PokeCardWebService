@@ -11,8 +11,8 @@ module.exports = function(app) {
 	//app.route('/collectionuser/:login').get(userController.collection);//idem avec get pour test via url
 	app.route('/exchangereq').post(userController.exchangereq);//demande d'échange et affichage des demande en cours
 	//app.route('/exchangereq/:login/:pokemonId').get(userController.exchangereq);//idem avec get pour test via url
-	//app.route('/exchangewith').post(userController.exchangewith);//echange avec un autre utilisateur
-	app.route('/exchangewith/:login1/:login2').get(userController.exchangewith);//idem avec get pour test via url
+	app.route('/exchangewith').post(userController.exchangewith);//echange avec un autre utilisateur
+	//app.route('/exchangewith/:login1/:login2').get(userController.exchangewith);//idem avec get pour test via url
 	//app.route('/signup').post(authController.signup);//deconnexion
 	//app.route('/listeamis').get(pokemonController.amis);//affichage de la liste d'ami(s)
 

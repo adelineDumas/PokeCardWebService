@@ -100,10 +100,10 @@ exports.exchangereq = function(req, res) {
 }
 
 exports.exchangewith = function(req, res) {
-	//var loginUser1 = req.body.login_user1; //POST
-	var loginUser1 = req.params.login1; //GET
-	//var loginUser2 = req.body.login_user2; //POST
-	var loginUser2 = req.params.login2; //GET
+	var loginUser1 = req.body.loginUser1; //POST
+	//var loginUser1 = req.params.login1; //GET
+	var loginUser2 = req.body.loginUser2; //POST
+	//var loginUser2 = req.params.login2; //GET
 
 	var pokemonId1, pokemonId2, idLignePkmnUser1, idLignePkmnUser2;
 
