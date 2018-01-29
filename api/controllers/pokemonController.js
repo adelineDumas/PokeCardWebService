@@ -22,7 +22,6 @@ exports.pokedex = function(req, res) {
 			res.json(response);
 		});
 	});
-
 	request.on('error', (e) => {
 		console.error(e);
 	});
@@ -103,4 +102,4 @@ exports.booster = function(req, res) {
 
 	request.end();
 
-}
+};
