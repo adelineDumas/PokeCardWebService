@@ -74,12 +74,16 @@ exports.exchangereq = function(req, res) {
 	var nomPokemon = req.body.nom_pokemon;
 	var url = req.body.url;
 
-	connection.query('INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '", "' + nomPokemon + '", "' + url + '")', function(error, results, fields) {
-		console.log('Y A UNE ERREUR GROS INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '")');
-		if(error) {
-			res.json({ response: false });
-		}
-	});
+	if(nomPokemon){
+		connection.query('INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '", "' + nomPokemon + '", "' + url + '")', function(error, results, fields) {
+			if(error) {
+				res.json({ response: false });
+			}
+		});
+	}
+	else{
+		res.json({ response: true });//aucun résultat car pas de pokemon inséré
+	}
 
 	connection.query('SELECT login_user, id_pokemon, nom_pokemon, url FROM Requete_Echange WHERE login_user NOT LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(error){
