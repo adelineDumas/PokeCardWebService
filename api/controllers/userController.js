@@ -71,38 +71,38 @@ exports.exchangereq = function(req, res) {
 	var pokemonId = req.body.id_pokemon;
 	//var pokemonId = req.params.id_pokemon;
 	var nomPokemon = req.body.nom_pokemon;
-    //var nomPokemon = req.params.nom_pokemon;
+  //var nomPokemon = req.params.nom_pokemon;
 	var url = req.body.url;
-    //var url = req.params.url;
+  //var url = req.params.url;
 
 	if(nomPokemon){
 		connection.query('INSERT INTO Requete_Echange VALUES (NULL,"' + loginUser + '", "' + pokemonId + '", "' + nomPokemon + '", "' + url + '")', function(error, results, fields) {
 			if(error) {
 				res.json({ response: false });
 			}
-			else{
-                connection.query('SELECT login_user, id_pokemon, nom_pokemon, url FROM Requete_Echange WHERE login_user NOT LIKE "' + loginUser + '"', function(error, results, fields) {
-                    if(error){
-                        res.json({ response: false });//aucun résultat à cause d'une erreur
-                    }
-                    if(results.length >= 1) {
-                        var data = [];
-                        for(var i=0;i<results.length;i++){
-                            var line = {"login_user": results[i].login_user, "id_pokemon": results[i].id_pokemon, "nom_pokemon": results[i].nom_pokemon, "url": results[i].url};
-                            data.push(line);
-                        }
-                        res.json(data);
-                    }
-                    else {
-                        res.json({ response: true });//aucun résultat car la seule demande d'échange est la notre
-                    }
-                });
-			}
 		});
 	}
-	else{
-		res.json({ response: true });//aucun résultat car pas de pokemon inséré (pour la consultation)
-	}
+	connection.query('SELECT login_user, id_pokemon, nom_pokemon, url FROM Requete_Echange WHERE login_user NOT LIKE "' + loginUser + '"', function(error, results, fields) {
+		if(error){
+			res.json({ response: false });//aucun résultat à cause d'une erreur
+		}
+		else if(results.length >= 1) {
+			var data = [];
+			for(var i=0;i<results.length;i++){
+					var line = {
+						"login_user": results[i].login_user,
+						"id_pokemon": results[i].id_pokemon,
+						"nom_pokemon": results[i].nom_pokemon,
+						"url": results[i].url
+					};
+					data.push(line);
+				}
+			res.json(data);
+		}
+		else {
+			res.json({ response: true });//aucun résultat car la seule demande d'échange est la notre
+		}
+	});
 };
 
 exports.exchangewith = function(req, res) {
@@ -110,8 +110,12 @@ exports.exchangewith = function(req, res) {
 	//var loginUser1 = req.params.login1; //GET
 	var loginUser2 = req.body.loginUser2; //POST
 	//var loginUser2 = req.params.login2; //GET
+	//var pokemonId1 = req.params.idPokemon1; //GET
+	var pokemonId1 = req.body.idPokemon1; //POST
+	//var pokemonId2 = req.params.idPokemon2; //GET
+	var pokemonId2 = req.body.idPokemon2; //POST
 
-	var pokemonId1, pokemonId2, idLignePkmnUser1, idLignePkmnUser2, idLigneReqEx1, idLigneReqEx2;
+	var idLignePkmnUser1, idLignePkmnUser2, idLigneReqEx1, idLigneReqEx2;
 
 	//On récupère l'id du pokemon que l'utilisateur 1 veut échanger
 	connection.query('SELECT id_pokemon FROM Requete_Echange WHERE login_user LIKE "' + loginUser1 + '"', function(error, results, fields) {
@@ -168,19 +172,19 @@ exports.exchangewith = function(req, res) {
 															idLigneReqEx1 = results[0].id_ligne;
 															idLigneReqEx2 = results[1].id_ligne;
 
-                                                            //on supprime les demandes d'échanges des 2 utilisateurs
-                                                            connection.query('DELETE FROM Requete_Echange WHERE id_ligne = "' + idLigneReqEx1 + '" OR id_ligne =' + idLigneReqEx2, function(error, results, fields) {
-                                                                if(error){
-                                                                    console.error(error);
-                                                                    res.json({ response: false });
-                                                                }
-                                                                else{
-                                                                    res.json({ response: true });//echange effectué avec succès
-                                                                }
-                                                            });
+                              //on supprime les demandes d'échanges des 2 utilisateurs
+                              connection.query('DELETE FROM Requete_Echange WHERE id_ligne = "' + idLigneReqEx1 + '" OR id_ligne =' + idLigneReqEx2, function(error, results, fields) {
+                              	if(error){
+                              		console.error(error);
+                                	res.json({ response: false });
+                              	}
+                              	else{
+                              		res.json({ response: true });//echange effectué avec succès
+                              	}
+                              });
 														}
 														else{
-                                                            res.json({ response: false });
+                            	res.json({ response: false });
 														}
 													});
 												}
@@ -189,13 +193,13 @@ exports.exchangewith = function(req, res) {
 									});
 								}
 								else{
-                                    res.json({ response: false });
+                  res.json({ response: false });
 								}
 							});
 						}
-                        else{
-                            res.json({ response: false });
-                        }
+            else{
+              res.json({ response: false });
+            }
 					});
 				}
 				else {

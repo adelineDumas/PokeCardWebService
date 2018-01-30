@@ -10,10 +10,10 @@ module.exports = function(app) {
 	app.route('/collectionuser').post(userController.collection);//affichage de la collection de l'utilisateur connecté
 	app.route('/collectionuser/:login').get(userController.collection);//idem avec get pour test via url
 	app.route('/exchangereq').post(userController.exchangereq);//demande d'échange et affichage des demande en cours
-	//app.route('/exchangereq/:login_user/:id_pokemon?/:nom_pokemon?/:url?').get(userController.exchangereq);//idem avec get pour test via url
+	app.route('/exchangereq/:login_user/:id_pokemon?/:nom_pokemon?/:url?').get(userController.exchangereq);//idem avec get pour test via url
 	app.route('/exchangewith').post(userController.exchangewith);//echange avec un autre utilisateur
-	//app.route('/exchangewith/:login1/:login2').get(userController.exchangewith);//idem avec get pour test via url
-	//app.route('/signup').post(authController.signup);//deconnexion
+	app.route('/exchangewith/:login1/:login2/:idPokemon1/:idPokemon2').get(userController.exchangewith);//idem avec get pour test via url
+	//app.route('/signup').post(userController.signup);//deconnexion
 	//app.route('/listeamis').get(pokemonController.amis);//affichage de la liste d'ami(s)
 
 };
