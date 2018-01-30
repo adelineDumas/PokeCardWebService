@@ -13,7 +13,8 @@ module.exports = function(app) {
 	app.route('/exchangereq/:login_user/:id_pokemon?/:nom_pokemon?/:url?').get(userController.exchangereq);//idem avec get pour test via url
 	app.route('/exchangewith').post(userController.exchangewith);//echange avec un autre utilisateur
 	app.route('/exchangewith/:login1/:login2/:idPokemon1/:idPokemon2').get(userController.exchangewith);//idem avec get pour test via url
-	//app.route('/signup').post(userController.signup);//deconnexion
+	app.route('/signup').post(userController.signup);//deconnexion
+	app.route('/signup/:login_user/:password/:mail').get(userController.signup);//deconnexion
 	//app.route('/listeamis').get(pokemonController.amis);//affichage de la liste d'ami(s)
 
 };
