@@ -229,20 +229,34 @@ exports.exchangewith = function(req, res) {
 	});
 };
 
-/*exports.listeamis = function(req, res){
-		connection.query('SELECT * FROM Collection_User WHERE login_user LIKE "' + global.user["login"] + '"', function(error, results, fields){
-			if(results){
-				res.json({"amis": results});
+exports.listeamis = function(req, res){
+	var loginUser = req.body.login;//POST
+	//var loginUser = req.params.login;//GET
+
+	connection.query('SELECT * FROM Ami WHERE login_user1 LIKE "' + loginUser + '"', function(error, results, fields){
+		if(error){
+			res.json({response : false});
+		}
+		else if(results.length > 0){
+			var response = [];
+			for(var i=0;i<results.length;i++){
+				var responseTmp = {
+					"login_user1" : results[0].login_user1,
+					"login_user2" : results[0].login_user2,
+				};
+				response.push(responseTmp);
 			}
-			else{
-				res.json({amis : false});
-			}
-		});
-}*/
+			res.json(response);
+		}
+		else{
+			res.json([]);
+		}
+	});
+}
 
 exports.signup = function(req, res) {
 	var loginUser = req.body.login;//POST
-	//var loginUser = req.params.login_user;//GET
+	//var loginUser = req.params.login;//GET
 	var password = req.body.password;//POST
 	//var password = req.params.password;//GET
 	var mail = req.body.mail;//POST
