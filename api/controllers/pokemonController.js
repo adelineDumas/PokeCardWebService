@@ -1,6 +1,14 @@
 'use strict';
 var http = require('http');
 var https = require('https');
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+	host: 'localhost',
+	user: 'root',
+	password: '',
+	database: 'PokeCard'
+});
 
 exports.pokedex = function(req, res) {
 
@@ -66,6 +74,9 @@ exports.pokemon = function(req, res) {
 }
 
 exports.booster = function(req, res) {
+	var loginUser = req.body.login_user;//POST
+	//var loginUser = req.params.login_user;//GET
+
 	var options = {
 					port: 3000,
 					hostname: '127.0.0.1',
@@ -79,27 +90,34 @@ exports.booster = function(req, res) {
 	var response = [];
 
 	var data = "";
+	var requeteInsertion = 'INSERT INTO Collection_User VALUES ';
 
 	var request = http.get(options, (result) => {
 			result.on('data', (d) => {
-			data += d;
-	});
-
-	result.on('end', function() {
-			var tmpData = JSON.parse(data);
-			for(var i=0;i<15;i++){
-				var min = Math.ceil(1);
-	    	var max = Math.floor(721);
-	    	var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
-				response.push(tmpData[pokemonId]);
-			}
-			res.json(response);
-		});
+				data += d;
+			});
+			result.on('end', function() {
+				var tmpData = JSON.parse(data);
+				for(var i=0;i<15;i++){
+					var min = Math.ceil(1);
+	    		var max = Math.floor(721);
+	    		var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
+					requeteInsertion += '(NULL, "' + loginUser + '", "' + pokemonId + '"),';
+					response.push(tmpData[pokemonId]);
+				}
+				requeteInsertion = requeteInsertion.substring(0, requeteInsertion.length - 1);
+				connection.query(requeteInsertion, function(error, results, fields) {
+					if(error){
+						res.json({ response: false });
+					}
+					else{
+						res.json(response);
+					}
+				});
+			});
 	});
 	request.on('error', (e) => {
 		console.error(e);
 	});
-
 	request.end();
-
 };

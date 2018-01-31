@@ -225,12 +225,12 @@ exports.exchangewith = function(req, res) {
 }*/
 
 exports.signup = function(req, res) {
-	//var loginUser = req.body.login;//POST
-	var loginUser = req.params.login_user;//GET
-	//var password = req.body.password;//POST
-	var password = req.params.password;//GET
-	//var mail = req.body.mail;//POST
-	var mail = req.params.mail;//GET
+	var loginUser = req.body.login;//POST
+	//var loginUser = req.params.login_user;//GET
+	var password = req.body.password;//POST
+	//var password = req.params.password;//GET
+	var mail = req.body.mail;//POST
+	//var mail = req.params.mail;//GET
 
 	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '")', function(error, results, fields) {
 		if(error){
