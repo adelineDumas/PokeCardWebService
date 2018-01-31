@@ -34,7 +34,7 @@ exports.collection = function(req, res) {
   var loginUser = req.body.login; // POST
   //var loginUser = req.params.login; // GET
 
-	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '" ORDER BY id_pokemon', function(error, results, fields) {
 		if(results.length > 0) {
 
 				var options = "https://pokeapi.co/api/v2/pokedex/1/"; //pokedex national
