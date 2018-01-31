@@ -35,7 +35,10 @@ exports.collection = function(req, res) {
   //var loginUser = req.params.login; // GET
 
 	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '" ORDER BY id_pokemon', function(error, results, fields) {
-		if(results.length > 0) {
+		if(error){
+			res.json({ response: false });
+		}
+		else if(results.length > 0) {
 
 				var options = "https://pokeapi.co/api/v2/pokedex/1/"; //pokedex national
 
@@ -48,7 +51,11 @@ exports.collection = function(req, res) {
 					result.on('end', function() {
 						var infoPokemon = JSON.parse(data);
 						for(var i=0;i<results.length;i++){
-							var pkmnTmp = {"id_pokemon":results[i].id_pokemon, "name_pokemon": infoPokemon.pokemon_entries[results[i].id_pokemon-1].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].id_pokemon+".png"}
+							var pkmnTmp = {
+								"id_pokemon":results[i].id_pokemon,
+								"name_pokemon": infoPokemon.pokemon_entries[results[i].id_pokemon-1].pokemon_species.name,
+								"url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].id_pokemon+".png"
+							};
 							response.push(pkmnTmp);
 						}
 						res.json(response);
@@ -60,7 +67,7 @@ exports.collection = function(req, res) {
 				request.end();
 		}
 		else {
-        	res.json({ response: false });
+      	res.json([]);
 		}
 	});
 };
@@ -179,7 +186,16 @@ exports.exchangewith = function(req, res) {
                                 	res.json({ response: false });
                               	}
                               	else{
-                              		res.json({ response: true });//echange effectué avec succès
+																	//on ajoute 1 point aux 2 utilisateurs
+		                              connection.query('UPDATE User SET points = points+1 WHERE login_user LIKE "' + loginUser1 + '" OR login_user LIKE "' + loginUser2 + '"', function(error, results, fields) {
+		                              	if(error){
+		                              		console.error(error);
+		                                	res.json({ response: false });
+		                              	}
+		                              	else{
+		                              		res.json({ response: true });//echange effectué avec succès
+		                              	}
+		                              });
                               	}
                               });
 														}
@@ -232,7 +248,7 @@ exports.signup = function(req, res) {
 	var mail = req.body.mail;//POST
 	//var mail = req.params.mail;//GET
 
-	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '")', function(error, results, fields) {
+	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '", 0)', function(error, results, fields) {
 		if(error){
 			res.json({ response: false });
 		}

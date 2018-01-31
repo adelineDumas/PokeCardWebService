@@ -74,8 +74,8 @@ exports.pokemon = function(req, res) {
 }
 
 exports.booster = function(req, res) {
-	var loginUser = req.body.login_user;//POST
-	//var loginUser = req.params.login_user;//GET
+	var loginUser = req.body.login;//POST
+	//var loginUser = req.params.login;//GET
 
 	var options = {
 					port: 3000,
@@ -111,9 +111,17 @@ exports.booster = function(req, res) {
 						res.json({ response: false });
 					}
 					else{
-						res.json(response);
-					}
-				});
+						connection.query('UPDATE User SET points = points-10 WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+							if(error){
+								console.error(error);
+								res.json({ response: false });
+							}
+							else{
+								res.json(response);
+							}
+					});
+				}
+			});
 			});
 	});
 	request.on('error', (e) => {
