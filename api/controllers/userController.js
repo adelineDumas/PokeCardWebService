@@ -117,10 +117,10 @@ exports.exchangewith = function(req, res) {
 	//var loginUser1 = req.params.login1; //GET
 	var loginUser2 = req.body.loginUser2; //POST
 	//var loginUser2 = req.params.login2; //GET
-	//var pokemonId1 = req.params.idPokemon1; //GET
 	var pokemonId1 = req.body.idPokemon1; //POST
-	//var pokemonId2 = req.params.idPokemon2; //GET
+	//var pokemonId1 = req.params.idPokemon1; //GET
 	var pokemonId2 = req.body.idPokemon2; //POST
+	//var pokemonId2 = req.params.idPokemon2; //GET
 
 	var idLignePkmnUser1, idLignePkmnUser2, idLigneReqEx1, idLigneReqEx2;
 
@@ -229,20 +229,54 @@ exports.exchangewith = function(req, res) {
 	});
 };
 
-exports.listeamis = function(req, res){
+
+exports.signup = function(req, res) {
 	var loginUser = req.body.login;//POST
 	//var loginUser = req.params.login;//GET
+	var password = req.body.password;//POST
+	//var password = req.params.password;//GET
+	var mail = req.body.mail;//POST
+	//var mail = req.params.mail;//GET
 
-	connection.query('SELECT * FROM Ami WHERE login_user1 LIKE "' + loginUser + '"', function(error, results, fields){
+	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '", 10)', function(error, results, fields) {
+		if(error){
+			res.json({ response: false });
+		}
+		else{
+			res.json({ response: true });
+		}
+	});
+}
+
+exports.addfriend = function(req, res){
+	var loginUser = req.body.login_user;//POST
+	//var loginUser = req.params.login_user;//GET
+	var loginFriend = req.body.login_friend;//POST
+	//var loginFriend = req.params.login_friend;//GET
+
+	connection.query('INSERT INTO Ami VALUES (NULL,"' + loginUser + '","' + loginFriend + '")', function(error, results, fields) {
+		if(error){
+			res.json({ response: false });
+		}
+		else{
+			res.json({ response: true });
+		}
+	});
+}
+
+exports.searchuser = function(req, res){
+	var stringUser = req.params.string_user;//GET
+	var response = [];
+	connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user LIKE "%' + stringUser + '%"', function(error, results, fields) {
 		if(error){
 			res.json({response : false});
 		}
 		else if(results.length > 0){
-			var response = [];
 			for(var i=0;i<results.length;i++){
 				var responseTmp = {
-					"login_user1" : results[0].login_user1,
-					"login_user2" : results[0].login_user2,
+					"login" : results[i].login_user,
+					"mail" : results[i].mail,
+					"avatar" : results[i].avatar,
 				};
 				response.push(responseTmp);
 			}
@@ -254,20 +288,77 @@ exports.listeamis = function(req, res){
 	});
 }
 
-exports.signup = function(req, res) {
-	var loginUser = req.body.login;//POST
-	//var loginUser = req.params.login;//GET
-	var password = req.body.password;//POST
-	//var password = req.params.password;//GET
-	var mail = req.body.mail;//POST
-	//var mail = req.params.mail;//GET
-
-	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '", 0)', function(error, results, fields) {
+exports.randomuser = function(req, res){
+	var response = [];
+	var responseAll = [];
+	connection.query('SELECT login_user, mail, avatar FROM User', function(error, results, fields) {
 		if(error){
-			res.json({ response: false });
+			res.json({response : false});
+		}
+		else if(results.length > 0){
+			for(var i=0;i<results.length;i++){
+				var userTmp = {
+					"login" : results[i].login_user,
+					"mail" : results[i].mail,
+					"avatar" : results[i].avatar,
+				};
+				responseAll.push(userTmp);
+			}
+			if(responseAll.length <= 10){
+				res.json(responseAll);
+			}
+			else{
+				for(var i=0;i<10;i++){
+					var min = Math.ceil(1);
+					var max = Math.floor(responseAll.length);
+					var userId = Math.floor(Math.random() * (max - min +1)) + min;
+					response.push(responseAll[userId-1]);
+					responseAll.splice(userId, 1);
+				}
+				res.json(response);
+			}
 		}
 		else{
-			res.json({ response: true });
+			res.json([]);
+		}
+	});
+}
+
+exports.friendslist = function(req, res){
+	var loginUser = req.body.login;//POST
+	//var loginUser = req.params.login_user;//GET
+
+	connection.query('SELECT * FROM Ami WHERE login_user1 LIKE "' + loginUser + '" OR login_user2 LIKE "' + loginUser + '"', function(error, results, fields){
+		if(error){
+			res.json({response : false});
+		}
+		else if(results.length > 0){
+			var response = [];
+			var promiseArray = [];
+			for(var i=0;i<results.length;i++){
+				promiseArray.push(new Promise(function(resolve,reject){
+					var loginFriend = (loginUser == results[i].login_user1) ? results[i].login_user2 : results[i].login_user1;
+					connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user LIKE "' + loginFriend + '"', function(error, results, fields) {
+						if(error){
+							res.json({response : false});
+						}
+						else{
+							var responseTmp = {
+									"login" : results[0].login_user,
+									"mail" : results[0].mail,
+									"avatar" : results[0].avatar,
+							};
+							resolve(responseTmp);
+						}
+					});
+				}));
+			}
+			Promise.all(promiseArray).then(function(response){
+				res.json(response);
+			});
+		}
+		else{
+			res.json([]);
 		}
 	});
 }

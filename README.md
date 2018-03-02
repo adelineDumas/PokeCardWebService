@@ -1,6 +1,6 @@
 # PokeCardWebServices
 
-- Installer Node JS ( https://nodejs.org/en) sur votre poste
+- Installer Node JS (https://nodejs.org/en) sur votre poste
 
 - Installer Xamp (ou Wamp pour Windows) puis démarrer votre base de données MySQL
 
