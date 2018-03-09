@@ -89,43 +89,56 @@ exports.booster = function(req, res) {
 
 	var response = [];
 
-	var data = "";
-	var requeteInsertion = 'INSERT INTO Collection_User VALUES ';
+	connection.query('SELECT points FROM User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+		if(error){
+			console.error(error);
+			res.json({ response: false });
+		}
+		else{
+			if(results[0].points >= 10){
+				var data = "";
+				var requeteInsertion = 'INSERT INTO Collection_User VALUES ';
 
-	var request = http.get(options, (result) => {
-			result.on('data', (d) => {
-				data += d;
-			});
-			result.on('end', function() {
-				var tmpData = JSON.parse(data);
-				for(var i=0;i<15;i++){
-					var min = Math.ceil(1);
-	    		var max = Math.floor(721);
-	    		var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
-					requeteInsertion += '(NULL, "' + loginUser + '", "' + pokemonId + '"),';
-					response.push(tmpData[pokemonId]);
-				}
-				requeteInsertion = requeteInsertion.substring(0, requeteInsertion.length - 1);
-				connection.query(requeteInsertion, function(error, results, fields) {
-					if(error){
-						res.json({ response: false });
-					}
-					else{
-						connection.query('UPDATE User SET points = points-10 WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
-							if(error){
-								console.error(error);
-								res.json({ response: false });
+				var request = http.get(options, (result) => {
+						result.on('data', (d) => {
+							data += d;
+						});
+						result.on('end', function() {
+							var tmpData = JSON.parse(data);
+							for(var i=0;i<15;i++){
+								var min = Math.ceil(1);
+								var max = Math.floor(721);
+								var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
+								requeteInsertion += '(NULL, "' + loginUser + '", "' + pokemonId + '"),';
+								response.push(tmpData[pokemonId]);
 							}
-							else{
-								res.json(response);
+							requeteInsertion = requeteInsertion.substring(0, requeteInsertion.length - 1);
+							connection.query(requeteInsertion, function(error, results, fields) {
+								if(error){
+									res.json({ response: false });
+								}
+								else{
+									connection.query('UPDATE User SET points = points-10 WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+										if(error){
+											console.error(error);
+											res.json({ response: false });
+										}
+										else{
+											res.json(response);
+										}
+								});
 							}
-					});
-				}
-			});
-			});
+						});
+						});
+				});
+				request.on('error', (e) => {
+					console.error(e);
+				});
+				request.end();
+			}
+			else{
+				res.json({ response: false });
+			}
+		}
 	});
-	request.on('error', (e) => {
-		console.error(e);
-	});
-	request.end();
 };
