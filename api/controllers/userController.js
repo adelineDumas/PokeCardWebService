@@ -249,9 +249,9 @@ exports.signup = function(req, res) {
 }
 
 exports.addfriend = function(req, res){
-	var loginUser = req.body.login_user;//POST
+	var loginFriend = req.body.login;//POST
 	//var loginUser = req.params.login_user;//GET
-	var loginFriend = req.body.login_friend;//POST
+	var loginUser = req.body.login_user;//POST
 	//var loginFriend = req.params.login_friend;//GET
 
 	connection.query('INSERT INTO Ami VALUES (NULL,"' + loginUser + '","' + loginFriend + '")', function(error, results, fields) {
