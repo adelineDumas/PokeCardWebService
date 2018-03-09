@@ -7,6 +7,7 @@ module.exports = function(app) {
 	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);//affichage d'un pokemon
 	app.route('/getbooster/:login').get(pokemonController.booster);//obtention d'un booster (15 pokemons aleatoires)
 	app.route('/getbooster').post(pokemonController.booster);//obtention d'un booster (15 pokemons aleatoires)
+	app.route('/searchpokemon/:string_pkmn').get(pokemonController.searchpokemon);//recherche d'un pokemon
 	app.route('/verifylogin').post(userController.verifylogin);//vérification du login et du mdp
 	app.route('/collectionuser').post(userController.collection);//affichage de la collection de l'utilisateur connecté
 	app.route('/collectionuser/:login').get(userController.collection);//idem avec get pour test via url
@@ -18,8 +19,10 @@ module.exports = function(app) {
 	app.route('/signup/:login_user/:password/:mail').get(userController.signup);//deconnexion
 	app.route('/addfriend').post(userController.addfriend);//ajout d'ami
 	app.route('/addfriend/:login_user/:login_friend').get(userController.addfriend);//ajout d'ami
+	app.route('/deletefriend').post(userController.deletefriend);//suppression d'un ami
+	app.route('/deletefriend/:login_user/:login_friend').get(userController.deletefriend);//suppression d'un ami
 	app.route('/searchuser/:string_user').get(userController.searchuser);//recherche d'ami
-	app.route('/randomuser').get(userController.randomuser);//affichage de personnes aléatoires
+	app.route('/randomuser/:login').get(userController.randomuser);//affichage de personnes aléatoires
 	app.route('/friendslist').post(userController.friendslist);//affichage de la liste d'ami(s)
 	app.route('/friendslist/:login_user').get(userController.friendslist);//affichage de la liste d'ami(s)
 

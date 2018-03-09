@@ -254,12 +254,48 @@ exports.addfriend = function(req, res){
 	var loginUser = req.body.login_user;//POST
 	//var loginFriend = req.params.login_friend;//GET
 
-	connection.query('INSERT INTO Ami VALUES (NULL,"' + loginUser + '","' + loginFriend + '")', function(error, results, fields) {
+	connection.query('SELECT login_user1, login_user2 FROM Ami WHERE login_user1 LIKE "' + loginUser + '" AND login_user2 LIKE "' + loginFriend + '" OR login_user1 LIKE "' + loginFriend + '" AND login_user2 LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(error){
 			res.json({ response: false });
 		}
+		else if(results.length == 0){
+			connection.query('INSERT INTO Ami VALUES (NULL,"' + loginUser + '","' + loginFriend + '")', function(error, results, fields) {
+				if(error){
+					res.json({ response: false });
+				}
+				else{
+					res.json({ response: true });
+				}
+			});
+		}
 		else{
-			res.json({ response: true });
+			res.json({ response: false });
+		}
+	});
+}
+
+exports.deletefriend = function(req, res){
+	var loginFriend = req.body.login;//POST
+	//var loginUser = req.params.login_user;//GET
+	var loginUser = req.body.login_user;//POST
+	//var loginFriend = req.params.login_friend;//GET
+
+	connection.query('SELECT login_user1, login_user2 FROM Ami WHERE login_user1 LIKE "' + loginUser + '" AND login_user2 LIKE "' + loginFriend + '" OR login_user1 LIKE "' + loginFriend + '" AND login_user2 LIKE "' + loginUser + '"', function(error, results, fields) {
+		if(error){
+			res.json({ response: false });
+		}
+		else if(results.length > 0){
+			connection.query('DELETE FROM Ami WHERE login_user1 LIKE "' + loginUser + '" AND login_user2 LIKE "' + loginFriend + '" OR login_user1 LIKE "' + loginFriend + '" AND login_user2 LIKE "' + loginUser + '"', function(error, results, fields) {
+				if(error){
+					res.json({ response: false });
+				}
+				else{
+					res.json({ response: true });
+				}
+			});
+		}
+		else{
+			res.json({ response: false });
 		}
 	});
 }
@@ -289,9 +325,10 @@ exports.searchuser = function(req, res){
 }
 
 exports.randomuser = function(req, res){
+	var loginUser = req.params.login;//GET
 	var response = [];
 	var responseAll = [];
-	connection.query('SELECT login_user, mail, avatar FROM User', function(error, results, fields) {
+	connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user <> "' + loginUser + '" AND login_user NOT IN (SELECT login_user1 FROM Ami WHERE login_user2 LIKE "' + loginUser + '") AND login_user NOT IN (SELECT login_user2 FROM Ami WHERE login_user1 LIKE "' + loginUser + '")', function(error, results, fields) {
 		if(error){
 			res.json({response : false});
 		}

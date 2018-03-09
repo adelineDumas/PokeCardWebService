@@ -142,3 +142,28 @@ exports.booster = function(req, res) {
 		}
 	});
 };
+
+exports.searchpokemon = function(req, res){
+	var stringPkmn = req.params.string_pkmn;//GET
+	var response = [];
+	/*connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user LIKE "%' + stringUser + '%"', function(error, results, fields) {
+		if(error){
+			res.json({response : false});
+		}
+		else if(results.length > 0){
+			for(var i=0;i<results.length;i++){
+				var responseTmp = {
+					"login" : results[i].login_user,
+					"mail" : results[i].mail,
+					"avatar" : results[i].avatar,
+				};
+				response.push(responseTmp);
+			}
+			res.json(response);
+		}
+		else{
+			res.json([]);
+		}
+	});*/
+	res.json([]);
+}
