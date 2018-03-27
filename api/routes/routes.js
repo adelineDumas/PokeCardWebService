@@ -7,7 +7,7 @@ module.exports = function(app) {
 	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);//affichage d'un pokemon
 	app.route('/getbooster/:login').get(pokemonController.booster);//obtention d'un booster (15 pokemons aleatoires)
 	app.route('/getbooster').post(pokemonController.booster);//obtention d'un booster (15 pokemons aleatoires)
-	app.route('/searchpokemon/:string_pkmn').get(pokemonController.searchpokemon);//recherche d'un pokemon
+	app.route('/searchpkmn/:string_pkmn').get(pokemonController.searchpkmn);//recherche de pokemon
 	app.route('/verifylogin').post(userController.verifylogin);//vérification du login et du mdp
 	app.route('/collectionuser').post(userController.collection);//affichage de la collection de l'utilisateur connecté
 	app.route('/collectionuser/:login').get(userController.collection);//idem avec get pour test via url

@@ -143,27 +143,37 @@ exports.booster = function(req, res) {
 	});
 };
 
-exports.searchpokemon = function(req, res){
+exports.searchpkmn = function(req, res){
 	var stringPkmn = req.params.string_pkmn;//GET
-	var response = [];
-	/*connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user LIKE "%' + stringUser + '%"', function(error, results, fields) {
-		if(error){
-			res.json({response : false});
-		}
-		else if(results.length > 0){
-			for(var i=0;i<results.length;i++){
-				var responseTmp = {
-					"login" : results[i].login_user,
-					"mail" : results[i].mail,
-					"avatar" : results[i].avatar,
+
+	var options = {
+					port: 3000,
+					hostname: '127.0.0.1',
+					method: 'GET',
+					path: '/pokedex',
+					headers: {
+						'Content-Type': 'application/json'
+					}
 				};
-				response.push(responseTmp);
-			}
-			res.json(response);
-		}
-		else{
-			res.json([]);
-		}
-	});*/
-	res.json([]);
+
+	var response = [];
+	var data = "";
+	var request = http.get(options, (result) => {
+			result.on('data', (d) => {
+				data += d;
+			});
+			result.on('end', function() {
+				var tmpData = JSON.parse(data);
+				for(var i=0;i<721;i++){
+					if(tmpData[i].name_pokemon.includes(stringPkmn)){
+						response.push(tmpData[i]);
+					}
+				}
+				res.json(response);
+			});
+	});
+	request.on('error', (e) => {
+		console.error(e);
+	});
+	request.end();
 }
