@@ -238,7 +238,7 @@ exports.signup = function(req, res) {
 	var mail = req.body.mail;//POST
 	//var mail = req.params.mail;//GET
 
-	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '", 10)', function(error, results, fields) {
+	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '", 10, NULL)', function(error, results, fields) {
 		if(error){
 			res.json({ response: false });
 		}
@@ -303,7 +303,7 @@ exports.deletefriend = function(req, res){
 exports.searchuser = function(req, res){
 	var stringUser = req.params.string_user;//GET
 	var response = [];
-	connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user LIKE "%' + stringUser + '% "', function(error, results, fields) {
+	connection.query('SELECT login_user, mail, avatar FROM User WHERE login_user LIKE "%' + stringUser + '%"', function(error, results, fields) {
 		if(error){
 			res.json({response : false});
 		}

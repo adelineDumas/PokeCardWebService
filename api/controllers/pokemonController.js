@@ -108,9 +108,9 @@ exports.booster = function(req, res) {
 							for(var i=0;i<15;i++){
 								var min = Math.ceil(1);
 								var max = Math.floor(721);
-								var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
+								var pokemonId = Math.floor(Math.random() * (max - min + 1)) + min;
 								requeteInsertion += '(NULL, "' + loginUser + '", "' + pokemonId + '"),';
-								response.push(tmpData[pokemonId]);
+								response.push(tmpData[pokemonId - 1]);
 							}
 							requeteInsertion = requeteInsertion.substring(0, requeteInsertion.length - 1);
 							connection.query(requeteInsertion, function(error, results, fields) {
