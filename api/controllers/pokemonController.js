@@ -144,7 +144,7 @@ exports.booster = function(req, res) {
 };
 
 exports.searchpkmn = function(req, res){
-	var stringPkmn = req.params.string_pkmn;//GET
+	var stringPkmn = req.params.name_pokemon;//GET
 
 	var options = {
 					port: 3000,

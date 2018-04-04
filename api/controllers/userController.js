@@ -127,14 +127,14 @@ exports.exchangewith = function(req, res) {
 	//On récupère l'id du pokemon que l'utilisateur 1 veut échanger
 	connection.query('SELECT id_pokemon FROM Requete_Echange WHERE login_user LIKE "' + loginUser1 + '"', function(error, results, fields) {
 		if(error){
-			res.json({ response: false });
+			res.sendStatus(400);
 		}
 		if(results.length > 0) {
 			pokemonId1 = results[0].id_pokemon;
 			//On récupère l'id du pokemon que l'utilisateur 2 veut échanger
 			connection.query('SELECT id_pokemon FROM Requete_Echange WHERE login_user LIKE "' + loginUser2 + '"', function(error, results, fields) {
 				if(error){
-					res.json({ response: false });
+					res.sendStatus(400);
 				}
 				if(results.length > 0) {
 					pokemonId2 = results[0].id_pokemon;
@@ -142,7 +142,7 @@ exports.exchangewith = function(req, res) {
 					//On récupère l'id de la ligne du pokemon dans la collection de l'utilisateur 1
 					connection.query('SELECT id_ligne FROM Collection_User WHERE login_user LIKE "' + loginUser1  + '" AND id_pokemon LIKE "' + pokemonId1 + '"', function(error, results, fields) {
 						if(error){
-							res.json({ response: false });
+							res.sendStatus(400);
 						}
 						if(results.length > 0){
 							idLignePkmnUser1 = results[0].id_ligne;//On prend toujours le 1er pokemon (il peut y avoir plusieurs pokemons identiques)
@@ -150,7 +150,7 @@ exports.exchangewith = function(req, res) {
 							//On récupère l'id de la ligne du pokemon dans la collection de l'utilisateur 2
 							connection.query('SELECT id_ligne FROM Collection_User WHERE login_user LIKE "' + loginUser2 + '" AND id_pokemon LIKE "' + pokemonId2 + '"', function(error, results, fields) {
 								if(error){
-									res.json({ response: false });
+									res.sendStatus(400);
 								}
 								if(results.length > 0){
 									idLignePkmnUser2 = results[0].id_ligne;//On prend toujours le 1er pokemon (il peut y avoir plusieurs pokemons identiques)
@@ -158,22 +158,19 @@ exports.exchangewith = function(req, res) {
 									//on effectue l'échange
 									connection.query('INSERT INTO Collection_User VALUES (NULL,"' + loginUser1 + '", "' + pokemonId2 + '"),(NULL,"' + loginUser2 + '", "' + pokemonId1 + '")', function(error, results, fields) {
 										if(error){
-											console.error(error);
-											res.json({ response: false });
+											res.sendStatus(400);
 										}
 										else{
 											//on supprime les pokemons échangés de la collection de leur utilisateur originel
 											connection.query('DELETE FROM Collection_User WHERE id_ligne LIKE "' + idLignePkmnUser1 + '" OR id_ligne LIKE "' + idLignePkmnUser2 + '"', function(error, results, fields) {
 												if(error){
-													console.error(error);
-													res.json({ response: false });
+													res.sendStatus(400);
 												}
 												else{
 													//on récupère l'identifiant des lignes concernées par l'échange dans la table Requete_Echange
 													connection.query('SELECT id_ligne FROM Requete_Echange WHERE login_user LIKE "' + loginUser1 + '" AND id_pokemon = "' + pokemonId1 + '" OR login_user LIKE "' + loginUser2 + '" AND id_pokemon = ' + pokemonId2, function(error, results, fields) {
 														if(error){
-															console.error(error);
-															res.json({ response: false });
+															res.sendStatus(400);
 														}
 														if(results.length > 0){
 															idLigneReqEx1 = results[0].id_ligne;
@@ -182,15 +179,13 @@ exports.exchangewith = function(req, res) {
                               //on supprime les demandes d'échanges des 2 utilisateurs
                               connection.query('DELETE FROM Requete_Echange WHERE id_ligne = "' + idLigneReqEx1 + '" OR id_ligne =' + idLigneReqEx2, function(error, results, fields) {
                               	if(error){
-                              		console.error(error);
-                                	res.json({ response: false });
+                                	res.sendStatus(400);
                               	}
                               	else{
 																	//on ajoute 1 point aux 2 utilisateurs
 		                              connection.query('UPDATE User SET points = points+1 WHERE login_user LIKE "' + loginUser1 + '" OR login_user LIKE "' + loginUser2 + '"', function(error, results, fields) {
 		                              	if(error){
-		                              		console.error(error);
-		                                	res.json({ response: false });
+		                                	res.sendStatus(400);
 		                              	}
 		                              	else{
 		                              		res.json({ response: true });//echange effectué avec succès
@@ -200,7 +195,7 @@ exports.exchangewith = function(req, res) {
                               });
 														}
 														else{
-                            	res.json({ response: false });
+                            	res.sendStatus(400);
 														}
 													});
 												}
@@ -209,22 +204,22 @@ exports.exchangewith = function(req, res) {
 									});
 								}
 								else{
-                  res.json({ response: false });
+                  res.sendStatus(400);
 								}
 							});
 						}
             else{
-              res.json({ response: false });
+              res.sendStatus(400);
             }
 					});
 				}
 				else {
-					res.json({ response: false });
+					res.sendStatus(400);
 				}
 			});
 		}
 		else {
-			res.json({ response: false });
+			res.sendStatus(400);
 		}
 	});
 };
@@ -240,7 +235,7 @@ exports.signup = function(req, res) {
 
 	connection.query('INSERT INTO User VALUES ("' + loginUser + '", "' + sha1(password) + '", "' + mail + '", 10, NULL)', function(error, results, fields) {
 		if(error){
-			res.json({ response: false });
+			res.sendStatus(400);
 		}
 		else{
 			res.json({ response: true });
