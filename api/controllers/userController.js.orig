@@ -21,6 +21,22 @@ exports.verifylogin = function(req, res) {
 				res.json(results[0]);
 			}
 			else {
+<<<<<<< HEAD
+				res.json({ password: false });
+			}
+		}
+		else {
+			res.json({ user: false });
+		}
+	});
+}
+
+exports.collection = function(req, res) {
+  var loginUser = req.body.login;
+
+	connection.query('SELECT id_pokemon FROM Collection_User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
+		if(results.length > 0) {
+=======
 				res.json({ password: false });//mauvais mot de passe
 			}
 		}
@@ -39,6 +55,7 @@ exports.collection = function(req, res) {
 			res.json({ response: false });
 		}
 		else if(results.length > 0) {
+>>>>>>> dev
 
 				var options = "https://pokeapi.co/api/v2/pokedex/1/"; //pokedex national
 
@@ -51,11 +68,15 @@ exports.collection = function(req, res) {
 					result.on('end', function() {
 						var infoPokemon = JSON.parse(data);
 						for(var i=0;i<results.length;i++){
+<<<<<<< HEAD
+							var pkmnTmp = {"id_pokemon":results[i].id_pokemon, "name_pokemon": infoPokemon.pokemon_entries[results[i].id_pokemon-1].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].id_pokemon+".png"}
+=======
 							var pkmnTmp = {
 								"id_pokemon":results[i].id_pokemon,
 								"name_pokemon": infoPokemon.pokemon_entries[results[i].id_pokemon-1].pokemon_species.name,
 								"url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+results[i].id_pokemon+".png"
 							};
+>>>>>>> dev
 							response.push(pkmnTmp);
 						}
 						res.json(response);
@@ -67,6 +88,9 @@ exports.collection = function(req, res) {
 				request.end();
 		}
 		else {
+<<<<<<< HEAD
+        res.json({ collection: false });
+=======
       	res.json([]);
 		}
 	});
@@ -315,10 +339,27 @@ exports.searchuser = function(req, res){
 		}
 		else{
 			res.json([]);
+>>>>>>> dev
 		}
 	});
 }
 
+<<<<<<< HEAD
+/*exports.listeamis = function(req, res){
+		connection.query('SELECT * FROM Collection_User WHERE login_user LIKE "' + global.user["login"] + '"', function(error, results, fields){
+			if(results){
+				res.json({"amis": results});
+			}
+			else{
+				res.json({amis : false});
+			}
+		});
+}*/
+
+/*exports.signup = function(req, res) {
+	//TODO
+}*/
+=======
 exports.randomuser = function(req, res){
 	var loginUser = req.params.login;//GET
 	var response = [];
@@ -394,3 +435,4 @@ exports.friendslist = function(req, res){
 		}
 	});
 }
+>>>>>>> dev

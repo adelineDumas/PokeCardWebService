@@ -1,6 +1,9 @@
 'use strict';
 var http = require('http');
 var https = require('https');
+<<<<<<< HEAD
+var Promise = require('promise');
+=======
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -9,6 +12,7 @@ var connection = mysql.createConnection({
 	password: '',
 	database: 'PokeCard'
 });
+>>>>>>> dev
 
 exports.pokedex = function(req, res) {
 
@@ -24,12 +28,20 @@ exports.pokedex = function(req, res) {
 			var infoPokemon = JSON.parse(data);
 			for(var i=0;i<721;i++){
 				var id_pkmn = i+1;
+<<<<<<< HEAD
+				var pkmnTmp = {"id_pokemon":id_pkmn, "name_pokemon": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"}
+=======
 				var pkmnTmp = {"id_pokemon":id_pkmn, "name_pokemon": infoPokemon.pokemon_entries[i].pokemon_species.name, "url_img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+id_pkmn+".png"};
+>>>>>>> dev
 				response.push(pkmnTmp);
 			}
 			res.json(response);
 		});
 	});
+<<<<<<< HEAD
+
+=======
+>>>>>>> dev
 	request.on('error', (e) => {
 		console.error(e);
 	});
@@ -43,13 +55,19 @@ exports.pokemon = function(req, res) {
 	var options = "https://pokeapi.co/api/v2/pokemon/"+pokemonId+"/";
 
 	var data = "";
+<<<<<<< HEAD
+=======
 	var response = [];
+>>>>>>> dev
 
 	var request = https.get(options, (result) => {
 		result.on('data', (d) => {
 			data += d;
 		});
 		result.on('end', function() {
+<<<<<<< HEAD
+			res.json(JSON.parse(data));
+=======
 			var infosPokemon = JSON.parse(data);
 			var customInfo = {
 				"id_pokemon" : infosPokemon.id,
@@ -63,6 +81,7 @@ exports.pokemon = function(req, res) {
 				"ability2" : (infosPokemon.abilities.length > 1) ? infosPokemon.abilities[1].ability.name : ""
 			};
 			res.json(customInfo);
+>>>>>>> dev
 		});
 	});
 
@@ -74,9 +93,12 @@ exports.pokemon = function(req, res) {
 }
 
 exports.booster = function(req, res) {
+<<<<<<< HEAD
+=======
 	var loginUser = req.body.login;//POST
 	//var loginUser = req.params.login;//GET
 
+>>>>>>> dev
 	var options = {
 					port: 3000,
 					hostname: '127.0.0.1',
@@ -89,6 +111,25 @@ exports.booster = function(req, res) {
 
 	var response = [];
 
+<<<<<<< HEAD
+	var data = "";
+
+	var request = http.get(options, (result) => {
+			result.on('data', (d) => {
+			data += d;
+	});
+
+	result.on('end', function() {
+			var tmpData = JSON.parse(data);
+			for(var i=0;i<15;i++){
+				var min = Math.ceil(1);
+	    	var max = Math.floor(721);
+	    	var pokemonId = Math.floor(Math.random() * (max - min +1)) + min;
+				response.push(tmpData[pokemonId]);
+			}
+			res.json(response);
+		});
+=======
 	connection.query('SELECT points FROM User WHERE login_user LIKE "' + loginUser + '"', function(error, results, fields) {
 		if(error){
 			console.error(error);
@@ -171,9 +212,16 @@ exports.searchpkmn = function(req, res){
 				}
 				res.json(response);
 			});
+>>>>>>> dev
 	});
 	request.on('error', (e) => {
 		console.error(e);
 	});
+<<<<<<< HEAD
+
 	request.end();
+
+=======
+	request.end();
+>>>>>>> dev
 }

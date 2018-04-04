@@ -1,6 +1,11 @@
 var express = require('express'),
 	app = express(),
+<<<<<<< HEAD
+	port = process.env.PORT || 3000
+	Pokemon = require('./api/manager/pokemonManager')
+=======
 	port = process.env.PORT || 3000,
+>>>>>>> dev
 	bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true}));

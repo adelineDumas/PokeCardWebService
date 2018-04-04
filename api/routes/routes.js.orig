@@ -3,6 +3,16 @@ module.exports = function(app) {
 	var pokemonController = require('../controllers/pokemonController');
 	var userController = require('../controllers/userController');
 
+<<<<<<< HEAD
+	app.route('/pokedex').get(pokemonController.pokedex);
+	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);
+	app.route('/getbooster').get(pokemonController.booster);
+	app.route('/verifylogin').post(userController.verifylogin);
+	app.route('/collectionuser').post(userController.collection);
+	//app.route('/collectionuser/:login').get(userController.collection);
+	//app.route('/signup').post(authController.signup);
+	//app.route('/listeamis').get(pokemonController.amis);
+=======
 	app.route('/pokedex').get(pokemonController.pokedex);//affichage du pokedex
 	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);//affichage d'un pokemon
 	app.route('/getbooster/:login').get(pokemonController.booster);//ROUTE DE TEST obtention d'un booster (15 pokemons aleatoires)
@@ -25,5 +35,6 @@ module.exports = function(app) {
 	app.route('/randomuser/:login').get(userController.randomuser);//affichage de personnes aléatoires
 	app.route('/friendslist').post(userController.friendslist);//affichage de la liste d'ami(s)
 	app.route('/friendslist/:login_user').get(userController.friendslist);//ROUTE DE TEST affichage de la liste d'ami(s)
+>>>>>>> dev
 
 };
