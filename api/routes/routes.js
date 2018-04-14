@@ -3,6 +3,7 @@ module.exports = function(app) {
 	var pokemonController = require('../controllers/pokemonController');
 	var userController = require('../controllers/userController');
 
+//Les routes de test permettent de tester les webservices sans passer par l'application Android
 	app.route('/pokedex').get(pokemonController.pokedex);//affichage du pokedex
 	app.route('/pokemon/:pokemonId').get(pokemonController.pokemon);//affichage d'un pokemon
 	app.route('/getbooster/:login').get(pokemonController.booster);//ROUTE DE TEST obtention d'un booster (15 pokemons aleatoires)
@@ -15,8 +16,8 @@ module.exports = function(app) {
 	app.route('/exchangereq/:login_user/:id_pokemon?/:nom_pokemon?/:url?').get(userController.exchangereq);//ROUTE DE TEST idem avec get pour test via url
 	app.route('/exchangewith').post(userController.exchangewith);//echange avec un autre utilisateur
 	app.route('/exchangewith/:login1/:login2/:idPokemon1/:idPokemon2').get(userController.exchangewith);//ROUTE DE TEST idem avec get pour test via url
-	app.route('/signup').post(userController.signup);//deconnexion
-	app.route('/signup/:login_user/:password/:mail').get(userController.signup);//ROUTE DE TEST deconnexion
+	app.route('/signup').post(userController.signup);//création de compte
+	app.route('/signup/:login_user/:password/:mail').get(userController.signup);//ROUTE DE TEST création de compte
 	app.route('/addfriend').post(userController.addfriend);//ajout d'ami
 	app.route('/addfriend/:login_user/:login_friend').get(userController.addfriend);//ROUTE DE TEST ajout d'ami
 	app.route('/deletefriend').post(userController.deletefriend);//suppression d'un ami

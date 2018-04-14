@@ -1,10 +1,12 @@
-#PokeCard WebServices
+# PokeCard WebServices
 
 - Installer Node JS (https://nodejs.org/en) sur votre poste
 
 - Installer Xamp (ou Wamp pour Windows) puis démarrer votre base de données MySQL
 
 - Faire un git clone de ce projet
+
+- Dans Xamp (ou Wamp), créer une nouvelle Base de donnée appelée PokeCard et exécutez le script SQL du projet pour créer les tables avec leur contenu.
 
 - Ouvrez un terminal
 
@@ -16,7 +18,7 @@
 
 - L'adresse pour utiliser votre webservice est localhost:3000
 
-#LES ROUTES :
+# LES ROUTES :
 
 | __TYPE__    | __Route__                 | __Fonction__                                                                                                   |
 | ------------|---------------------------|----------------------------------------------------------------------------------------------------------------|
